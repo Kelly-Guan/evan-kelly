@@ -9,7 +9,7 @@ import USuck  from "../assets/usuck.png";
 export default function Boards() {
     const easy = { rows: 8, cols: 8, mines: 10 };
     const medium = { rows: 16, cols: 16, mines: 40 };
-    const hard = { rows: 16, cols: 30, mines: 99 };
+    const hard = { rows: 16, cols: 25, mines: 60};
 
     const [config, setConfig] = useState(easy);
     const [board, setBoard] = useState<(number | "M")[][]>([]);
@@ -18,9 +18,9 @@ export default function Boards() {
     const [gameOver, setGameOver] = useState(false);
     const [firstClick, setFirstClick] = useState(true);
     const [startCell, setStartCell] = useState<{row: number, col: number} | null>(null);
-
-
     const [pulse, setPulse] = useState(false);
+    const [loading, setLoading] = useState(true);
+
 
     useEffect(() => {
     if (gameOver && !checkWin(flags, board)) {
@@ -36,65 +36,69 @@ export default function Boards() {
 
 
     useEffect(() => {
-        let cancelled = false;
-    
-        setTimeout(() => {
-            let newBoard: (number | "M")[][] = [];
-            let start: { row: number; col: number } | null = null;
-            let attempts = 0;
-            while (true) {
-                let mines = mineLocations(config);
-                newBoard = Array.from({ length: config.rows }, (_, r) =>
-                    Array.from({ length: config.cols }, (_, c) =>
-                        mines.has(`${r},${c}`) ? "M" : 0 as number
-                    )
-                );
-                for (let r = 0; r < config.rows; r++) {
-                    for (let c = 0; c < config.cols; c++) {
-                        if (newBoard[r][c] === "M") continue;
-                        let count = 0;
-                        for (let dr = -1; dr <= 1; dr++) {
-                            for (let dc = -1; dc <= 1; dc++) {
-                                if (dr === 0 && dc === 0) continue;
-                                const nr = r + dr, nc = c + dc;
-                                if (
-                                    nr >= 0 &&
-                                    nr < config.rows &&
-                                    nc >= 0 &&
-                                    nc < config.cols &&
-                                    newBoard[nr][nc] === "M"
-                                ) {
-                                    count++;
-                                }
-                            }
-                        }
-                        newBoard[r][c] = count;
-                    }
-                }
-                let safeCells: { row: number; col: number }[] = [];
-                for (let r = 0; r < config.rows; r++) {
-                    for (let c = 0; c < config.cols; c++) {
-                        if (newBoard[r][c] !== "M") safeCells.push({ row: r, col: c });
-                    }
-                }
-                start = safeCells[Math.floor(Math.random() * safeCells.length)];
-                if (isLogicallySolvable(newBoard, start)) break;
-                attempts++;
-                if (attempts > 1000) throw new Error("Failed to generate a no-guess board");
-            }
-            if (!cancelled) {
-                setBoard(newBoard);
-                setRevealed(Array.from({ length: config.rows }, () => Array(config.cols).fill(false)));
-                setFlags(Array.from({ length: config.rows }, () => Array(config.cols).fill(false)));
-                setGameOver(false);
-                setFirstClick(true);
-                setStartCell(start);
-            }
-        }, 100); 
-    
-        return () => { cancelled = true; };
-    }, [config]);
-
+      let cancelled = false;
+  
+      setLoading(true); // <-- show loader
+  
+      setTimeout(() => {
+          let newBoard: (number | "M")[][] = [];
+          let start: { row: number; col: number } | null = null;
+          let attempts = 0;
+          while (true) {
+              let mines = mineLocations(config);
+              newBoard = Array.from({ length: config.rows }, (_, r) =>
+                  Array.from({ length: config.cols }, (_, c) =>
+                      mines.has(`${r},${c}`) ? "M" : 0 as number
+                  )
+              );
+              for (let r = 0; r < config.rows; r++) {
+                  for (let c = 0; c < config.cols; c++) {
+                      if (newBoard[r][c] === "M") continue;
+                      let count = 0;
+                      for (let dr = -1; dr <= 1; dr++) {
+                          for (let dc = -1; dc <= 1; dc++) {
+                              if (dr === 0 && dc === 0) continue;
+                              const nr = r + dr, nc = c + dc;
+                              if (
+                                  nr >= 0 &&
+                                  nr < config.rows &&
+                                  nc >= 0 &&
+                                  nc < config.cols &&
+                                  newBoard[nr][nc] === "M"
+                              ) {
+                                  count++;
+                              }
+                          }
+                      }
+                      newBoard[r][c] = count;
+                  }
+              }
+              let safeCells: { row: number; col: number }[] = [];
+              for (let r = 0; r < config.rows; r++) {
+                  for (let c = 0; c < config.cols; c++) {
+                      if (newBoard[r][c] !== "M") safeCells.push({ row: r, col: c });
+                  }
+              }
+              start = safeCells[Math.floor(Math.random() * safeCells.length)];
+              if (isLogicallySolvable(newBoard, start)) break;
+              attempts++;
+              console.log("attempts: ", attempts)
+              if (attempts > 400000) throw new Error("Failed to generate a no-guess board");
+          }
+          if (!cancelled) {
+              setBoard(newBoard);
+              setRevealed(Array.from({ length: config.rows }, () => Array(config.cols).fill(false)));
+              setFlags(Array.from({ length: config.rows }, () => Array(config.cols).fill(false)));
+              setGameOver(false);
+              setFirstClick(true);
+              setStartCell(start);
+              setLoading(false); // <-- hide loader when done
+          }
+      }, 100); 
+  
+      return () => { cancelled = true; };
+  }, [config]);
+  
 
     const handleCellClick = (row: number, col: number) => {
         if (gameOver || revealed[row][col] || flags[row][col]) return;
@@ -192,69 +196,80 @@ export default function Boards() {
         return true; 
       }
 
-    return (
-            <div className="flex flex-col items-center justify-center">
-            <Header
-                flags={flags}
-                totalMines={config.mines}
-                firstClick={firstClick}
-                gameOver={gameOver}
-                />
-            <div className="flex gap-2">
-                <button
-                    className={`p-px px-3 rounded-sm transition-colors duration-150 text-purple-900
-                        ${config.cols === 8 ? 'bg-gray-200' : 'bg-gray-100 hover:bg-gray-200'} cursor-pointer`}
-                    onClick={() => setConfig(easy)}
-                >easy</button>     
-                <button
-                    className={`p-px px-3 rounded-sm transition-colors duration-150 text-purple-900
-                         ${config.cols === 16  ? 'bg-gray-200' : 'bg-gray-100 hover:bg-gray-200'} cursor-pointer`}
-                    onClick={() => setConfig(medium)}
-                >medium</button>     
-                <button
-                    className={`p-px px-3 rounded-sm transition-colors duration-150 text-purple-900
-                         ${config.cols === 30  ? 'bg-gray-200' : 'bg-gray-100 hover:bg-gray-200'} cursor-pointer`}
-                    onClick={() => setConfig(hard)}
-                >hard</button>     
-               
-            </div>
-            <div
-                style={{
-                    display: 'grid',
-                    gridTemplateColumns: `repeat(${config.cols}, 30px)`,
-                    gridTemplateRows: `repeat(${config.rows}, 30px)`,
-                    gap: 0,
-                    marginTop: 16,
-                }}
-            >
-                {Array.from({ length: config.rows }).map((_, rowIdx) =>
-                    Array.from({ length: config.cols }).map((_, colIdx) => (
-                        <Cells
-                            key={`${rowIdx}-${colIdx}`}
-                            value={board[rowIdx]?.[colIdx]}
-                            revealed={revealed[rowIdx]?.[colIdx]}
-                            flagged={flags[rowIdx]?.[colIdx]}
-                            onClick={() => handleCellClick(rowIdx, colIdx)}
-                            onRightClick={e => handleCellFlag(rowIdx, colIdx, e)}
-                            showX={Boolean(firstClick && startCell && rowIdx === startCell.row && colIdx === startCell.col)}         
-                            onChord={() => handleCellChord(rowIdx, colIdx)}
-                         />
-                    ))
-                )}
-            </div>
-            {gameOver && !checkWin(flags, board) && (
-            <div
-            className={`absolute left-1/2 transform -translate-x-1/2 top-1/2 text-red-600 text-6xl font-extrabold transition-transform duration-500 ease-in-out ${
-              pulse ? "animate-size-pulse" : ""
-            }`}
-          >
-            <div className="flex items-center gap-4">
-              <span>YOU SUCK!</span>
-              <img src={USuck} alt="you suck svg" className="w-20 h-20" />
-            </div>
+      return (
+        <div className="flex flex-col items-center justify-center">
+          <Header
+            flags={flags}
+            totalMines={config.mines}
+            firstClick={firstClick}
+            gameOver={gameOver}
+          />
+      
+          <div className="flex gap-2">
+            <button
+              className={`p-px px-3 rounded-sm transition-colors duration-150 text-purple-900
+                ${config.cols === 8 ? 'bg-gray-200' : 'bg-gray-100 hover:bg-gray-200'} cursor-pointer`}
+              onClick={() => setConfig(easy)}
+            >easy</button>
+            <button
+              className={`p-px px-3 rounded-sm transition-colors duration-150 text-purple-900
+                ${config.cols === 16  ? 'bg-gray-200' : 'bg-gray-100 hover:bg-gray-200'} cursor-pointer`}
+              onClick={() => setConfig(medium)}
+            >medium</button>
+            <button
+              className={`p-px px-3 rounded-sm transition-colors duration-150 text-purple-900
+                ${config.cols === 30  ? 'bg-gray-200' : 'bg-gray-100 hover:bg-gray-200'} cursor-pointer`}
+              onClick={() => setConfig(hard)}
+            >hard</button>
           </div>
-            )}
-            {gameOver && (checkWin(flags, board)) && <div className="text-pink-600 mt-4">you awesome 😽</div>}
+      
+          {loading ? (
+            <div className="flex items-center justify-center h-96">
+              <div className="text-lg text-gray-600 animate-pulse">Generating fair board...</div>
+            </div>
+          ) : (
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: `repeat(${config.cols}, 30px)`,
+                gridTemplateRows: `repeat(${config.rows}, 30px)`,
+                gap: 0,
+                marginTop: 16,
+              }}
+            >
+              {Array.from({ length: config.rows }).map((_, rowIdx) =>
+                Array.from({ length: config.cols }).map((_, colIdx) => (
+                  <Cells
+                    key={`${rowIdx}-${colIdx}`}
+                    value={board[rowIdx]?.[colIdx]}
+                    revealed={revealed[rowIdx]?.[colIdx]}
+                    flagged={flags[rowIdx]?.[colIdx]}
+                    onClick={() => handleCellClick(rowIdx, colIdx)}
+                    onRightClick={e => handleCellFlag(rowIdx, colIdx, e)}
+                    showX={Boolean(firstClick && startCell && rowIdx === startCell.row && colIdx === startCell.col)}         
+                    onChord={() => handleCellChord(rowIdx, colIdx)}
+                  />
+                ))
+              )}
+            </div>
+          )}
+      
+          {gameOver && !checkWin(flags, board) && (
+            <div
+              className={`absolute left-1/2 transform -translate-x-1/2 top-1/2 text-red-600 text-6xl font-extrabold transition-transform duration-500 ease-in-out ${
+                pulse ? "animate-size-pulse" : ""
+              }`}
+            >
+              <div className="flex items-center gap-4">
+                <span>YOU SUCK!</span>
+                <img src={USuck} alt="you suck svg" className="w-20 h-20" />
+              </div>
+            </div>
+          )}
+      
+          {gameOver && checkWin(flags, board) && (
+            <div className="text-pink-600 mt-4">you awesome 😽</div>
+          )}
         </div>
-    );
+      );      
 }

@@ -47,9 +47,9 @@ export default function Header({ flags, totalMines, firstClick, gameOver }: Head
   };
 
   return (
-    <div className="flex justify-between items-center w-[260px] sm:w-[320px] p-2 mb-4 bg-gray-100 rounded shadow font-mono">
-      <div className="text-purple-900">🫶 {totalMines - flagCount}</div>
-      <div className="text-purple-900">⌛ {formatTime(elapsed)}</div>
+    <div className="flex justify-between items-center gap-2">
+      <div className="text-purple-900 p-2 mb-4 bg-gray-100 rounded shadow font-mono w-[100px] sm:w-[150px] ">🫶 {totalMines - flagCount}</div>
+      <div className="text-purple-900 p-2 mb-4 bg-gray-100 rounded shadow font-mono w-[100px] sm:w-[150px]">⌛ {formatTime(elapsed)}</div>
     </div>
   );
 }
