@@ -1,4 +1,3 @@
-// Returns true if the board is logically solvable from startCell without guessing
 export function isLogicallySolvable(
     board: (number | "M")[][],
     startCell: { row: number; col: number }
@@ -8,7 +7,6 @@ export function isLogicallySolvable(
     const revealed = Array.from({ length: rows }, () => Array(cols).fill(false));
     const flagged = Array.from({ length: rows }, () => Array(cols).fill(false));
   
-    // Reveal the start cell and flood fill zeros
     function reveal(r: number, c: number) {
       if (r < 0 || r >= rows || c < 0 || c >= cols) return;
       if (revealed[r][c]) return;
@@ -29,7 +27,6 @@ export function isLogicallySolvable(
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           if (!revealed[r][c] || typeof board[r][c] !== "number" || board[r][c] === 0) continue;
-          // Count adjacent unrevealed and flagged cells
           let unrevealed = [];
           let flagCount = 0;
           for (let dr = -1; dr <= 1; dr++) {
@@ -42,7 +39,6 @@ export function isLogicallySolvable(
               }
             }
           }
-          // If number of unrevealed + flagged == cell number, flag all unrevealed
           if (unrevealed.length + flagCount === board[r][c]) {
             for (const [nr, nc] of unrevealed) {
               if (!flagged[nr][nc]) {
@@ -51,7 +47,6 @@ export function isLogicallySolvable(
               }
             }
           }
-          // If flagged == cell number, reveal all other unrevealed
           if (flagCount === board[r][c]) {
             for (const [nr, nc] of unrevealed) {
               if (!flagged[nr][nc] && !revealed[nr][nc]) {
@@ -65,7 +60,6 @@ export function isLogicallySolvable(
       }
     }
   
-    // If all non-mine cells are revealed, it's solvable
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         if (board[r][c] !== "M" && !revealed[r][c]) return false;

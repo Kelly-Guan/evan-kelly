@@ -25,7 +25,7 @@ export default function Boards() {
     if (gameOver && !checkWin(flags, board)) {
         const timer = setTimeout(() => {
         setPulse(true);
-        }, 20); // Start pulsing after 1s
+        }, 20);
 
         return () => clearTimeout(timer);
     } else {
@@ -138,7 +138,6 @@ export default function Boards() {
     const handleCellChord = (row: number, col: number) => {
         if (!revealed[row][col] || typeof board[row][col] !== "number" || board[row][col] === 0) return;
     
-        // Count adjacent flags and collect neighbors
         let flagCount = 0;
         let neighbors: {r: number, c: number}[] = [];
         for (let dr = -1; dr <= 1; dr++) {
@@ -157,16 +156,14 @@ export default function Boards() {
             }
         }
     
-        // Only chord if flag count matches the number
         if (flagCount !== board[row][col]) return;
     
-        // Reveal all adjacent, unflagged, unrevealed cells
         let hitMine = false;
         const newRevealed = revealed.map(r => [...r]);
         for (const {r, c} of neighbors) {
             if (!flags[r][c] && !revealed[r][c]) {
                 if (board[r][c] === "M") hitMine = true;
-                else revealCells(board, newRevealed, r, c); // recursively reveal
+                else revealCells(board, newRevealed, r, c);
                 newRevealed[r][c] = true;
             }
         }
@@ -175,7 +172,6 @@ export default function Boards() {
     
         if (hitMine) {
             setGameOver(true);
-            // Optionally, reveal all mines
             const revealAll = revealed.map((rowArr, r) =>
                 rowArr.map((cell, c) => board[r][c] === "M" ? true : cell)
             );
@@ -188,11 +184,11 @@ export default function Boards() {
           for (let c = 0; c < board[0].length; c++) {
             const isMine = board[r][c] === "M";
             const isFlagged = flags[r][c];
-            if (isMine && !isFlagged) return false; // mine not flagged
-            if (!isMine && isFlagged) return false; // wrong flag
+            if (isMine && !isFlagged) return false; 
+            if (!isMine && isFlagged) return false; 
           }
         }
-        return true; // all mines flagged correctly
+        return true; 
       }
 
     return (

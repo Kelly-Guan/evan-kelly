@@ -12,13 +12,11 @@ export default function Header({ flags, totalMines, firstClick, gameOver }: Head
   const rafId = useRef<number | null>(null);
   const startTimeRef = useRef<number | null>(null);
 
-  // Count flags
   const flagCount = flags.reduce(
     (sum, row) => sum + row.filter(Boolean).length,
     0
   );
 
-  // High-resolution timer
   useEffect(() => {
     if (!firstClick && !gameOver) {
       startTimeRef.current = performance.now() - elapsed;

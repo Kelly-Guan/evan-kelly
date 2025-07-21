@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "./FlipClock.css"; // Add this line
+import "./FlipClock.css"; 
 
 export default function Home() {
   const targetDate = new Date("2025-05-31T00:00:00");

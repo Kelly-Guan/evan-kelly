@@ -1,4 +1,3 @@
-// src/utils/revealCells.ts
 export function revealCells(
   board: (number | "M")[][],
   revealed: boolean[][],
