@@ -4,6 +4,7 @@ import { mineLocations } from "../utils/mineLocations";
 import { revealCells } from "../utils/revealCells";
 import { isLogicallySolvable } from "../utils/logicSolver";
 import Header from "./header";
+import USuck  from "../assets/usuck.png";
 
 export default function Boards() {
     const easy = { rows: 8, cols: 8, mines: 10 };
@@ -243,12 +244,15 @@ export default function Boards() {
             </div>
             {gameOver && !checkWin(flags, board) && (
             <div
-                className={`absolute left-1/2 transform -translate-x-1/2 top-1/2 text-red-600 text-9xl font-extrabold transition-transform duration-500 ease-in-out ${
-                pulse ? "animate-size-pulse" : ""
-                }`}
-            >
-                YOU SUCK! 
+            className={`absolute left-1/2 transform -translate-x-1/2 top-1/2 text-red-600 text-6xl font-extrabold transition-transform duration-500 ease-in-out ${
+              pulse ? "animate-size-pulse" : ""
+            }`}
+          >
+            <div className="flex items-center gap-4">
+              <span>YOU SUCK!</span>
+              <img src={USuck} alt="you suck svg" className="w-20 h-20" />
             </div>
+          </div>
             )}
             {gameOver && (checkWin(flags, board)) && <div className="text-pink-600 mt-4">you awesome 😽</div>}
         </div>
