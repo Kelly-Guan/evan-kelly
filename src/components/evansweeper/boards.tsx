@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import Cells from "./cells";
-import { mineLocations } from "../utils/mineLocations";
-import { revealCells } from "../utils/revealCells";
-import { isLogicallySolvable } from "../utils/logicSolver";
+import { mineLocations } from "../../utils/mineLocations";
+import { revealCells } from "../../utils/revealCells";
+import { isLogicallySolvable } from "../../utils/logicSolver";
 import Header from "./header";
-import USuck  from "../assets/usuck.png";
+import USuck  from "../../assets/usuck.png"
 
 export default function Boards() {
     const easy = { rows: 8, cols: 8, mines: 10 };
@@ -82,7 +82,6 @@ export default function Boards() {
               start = safeCells[Math.floor(Math.random() * safeCells.length)];
               if (isLogicallySolvable(newBoard, start)) break;
               attempts++;
-              console.log("attempts: ", attempts)
               if (attempts > 400000) throw new Error("Failed to generate a no-guess board");
           }
           if (!cancelled) {

@@ -1,4 +1,4 @@
-import Boards from '../components/boards'
+import Boards from '../components/evansweeper/boards'
 
 export default function EvanSweeper() {
 
