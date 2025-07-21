@@ -9,12 +9,20 @@ export default function NavBar() {
         className="text-lg font-bold cursor-pointer"
         onClick={() => navigate("/Home")}
       >evan & kelly 🫶</button>
+      <div>
       <button
         onClick={() => navigate("/EvanSweeper")}
         className={`p-px px-3 rounded-sm text-purple-900 hover:bg-purple-300 cursor-pointer`}
       >
-        evan sweeper 🧹
+        evan sweeps 🧹
       </button> 
+      <button
+        onClick={() => navigate("/EvanWords")}
+        className={`p-px px-3 rounded-sm text-purple-900 hover:bg-purple-300 cursor-pointer`}
+      >
+        evan yaps 🥰
+      </button> 
+      </div>
     </div>
   );
 }

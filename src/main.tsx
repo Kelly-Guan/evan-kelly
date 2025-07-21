@@ -6,6 +6,7 @@ import EvanSweeper from './screens/EvanSweeper';
 import Home from './screens/Home';
 import Layout from './layout';
 import NotFound from './screens/notFound';
+import EvanWords from './screens/EvanWords';
 
 function RootApp() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -16,16 +17,21 @@ function RootApp() {
         <Route path="/" element={<App onAuthenticate={() => setAuthenticated(true)} />} />
         <Route element={<Layout />}>
           <Route 
+              path="/Home" 
+              element={
+                authenticated ? <Home /> : <Navigate to="/" replace />
+              } 
+            />
+          <Route 
             path="/EvanSweeper" 
             element={
               authenticated ? <EvanSweeper /> : <Navigate to="/" replace />
             } 
           />
-
           <Route 
-            path="/Home" 
+            path="/EvanWords" 
             element={
-              authenticated ? <Home /> : <Navigate to="/" replace />
+              authenticated ? <EvanWords /> : <Navigate to="/" replace />
             } 
           />
         </Route>
