@@ -18,27 +18,11 @@ export default function Boards() {
     const [gameOver, setGameOver] = useState(false);
     const [firstClick, setFirstClick] = useState(true);
     const [startCell, setStartCell] = useState<{row: number, col: number} | null>(null);
-    const [pulse, setPulse] = useState(false);
     const [loading, setLoading] = useState(true);
-
-
-    useEffect(() => {
-    if (gameOver && !checkWin(flags, board)) {
-        const timer = setTimeout(() => {
-        setPulse(true);
-        }, 20);
-
-        return () => clearTimeout(timer);
-    } else {
-        setPulse(false);
-    }
-    }, [gameOver, flags, board]);
-
-
     useEffect(() => {
       let cancelled = false;
   
-      setLoading(true); // <-- show loader
+      setLoading(true);
   
       setTimeout(() => {
           let newBoard: (number | "M")[][] = [];
@@ -91,7 +75,7 @@ export default function Boards() {
               setGameOver(false);
               setFirstClick(true);
               setStartCell(start);
-              setLoading(false); // <-- hide loader when done
+              setLoading(false); 
           }
       }, 100); 
   
@@ -207,24 +191,24 @@ export default function Boards() {
           <div className="flex gap-2">
             <button
               className={`p-px px-3 rounded-sm transition-colors duration-150 text-purple-900
-                ${config.cols === 8 ? 'bg-gray-200' : 'bg-gray-100 hover:bg-gray-200'} cursor-pointer`}
+                ${config.cols === 8 ? 'bg-gray-200' : 'bg-gray-100 hover:bg-gray-200'} cursor-pointer font-mono`}
               onClick={() => setConfig(easy)}
             >easy</button>
             <button
               className={`p-px px-3 rounded-sm transition-colors duration-150 text-purple-900
-                ${config.cols === 16  ? 'bg-gray-200' : 'bg-gray-100 hover:bg-gray-200'} cursor-pointer`}
+                ${config.cols === 16  ? 'bg-gray-200' : 'bg-gray-100 hover:bg-gray-200'} cursor-pointer font-mono`}
               onClick={() => setConfig(medium)}
             >medium</button>
             <button
               className={`p-px px-3 rounded-sm transition-colors duration-150 text-purple-900
-                ${config.cols === 30  ? 'bg-gray-200' : 'bg-gray-100 hover:bg-gray-200'} cursor-pointer`}
+                ${config.cols === 30  ? 'bg-gray-200' : 'bg-gray-100 hover:bg-gray-200'} cursor-pointer font-mono`}
               onClick={() => setConfig(hard)}
             >hard</button>
           </div>
       
           {loading ? (
             <div className="flex items-center justify-center h-96">
-              <div className="text-lg text-gray-600 animate-pulse">Generating fair board...</div>
+              <div className="text-lg text-gray-600 animate-pulse font-mono">Generating fair board...</div>
             </div>
           ) : (
             <div
@@ -255,19 +239,16 @@ export default function Boards() {
       
           {gameOver && !checkWin(flags, board) && (
             <div
-              className={`absolute left-1/2 transform -translate-x-1/2 top-1/2 text-red-600 text-6xl font-extrabold transition-transform duration-500 ease-in-out ${
-                pulse ? "animate-size-pulse" : ""
-              }`}
+              className={`absolute left-1/2 transform -translate-x-1/2 top-1/2 text-red-600 text-6xl font-extrabold transition-transform duration-500 ease-in-out ${"animate-size-pulse"}`}
             >
-              <div className="flex items-center gap-4">
-                <span>YOU SUCK!</span>
-                <img src={USuck} alt="you suck svg" className="w-20 h-20" />
+              <div className="flex items-center gap-4 font-mono">
+                <span className="font-mono">YOU SUCK!</span> <img src={USuck} alt="you suck svg" className="w-20 h-20" />
               </div>
             </div>
           )}
       
           {gameOver && checkWin(flags, board) && (
-            <div className="text-pink-600 mt-4">you awesome 😽</div>
+            <div className="text-pink-600 mt-4 font-mono">you awesome 😽</div>
           )}
         </div>
       );      

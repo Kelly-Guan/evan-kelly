@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import wordleWords from "../../assets/wordleWords.json"
+import USuck from "../../assets/usuck.png"
 
 
 type LetterState = "empty" | "correct" | "wrongPosition" | "incorrect";
@@ -19,7 +20,6 @@ export default function Words() {
 
   const initializeGame = () => {
     const randomEntry = wordleWords[Math.floor(Math.random() * wordleWords.length)];
-    console.log(randomEntry);
     const word = randomEntry.word.toLowerCase();
     setChosenWord(word);
     
@@ -152,15 +152,15 @@ export default function Words() {
                 disabled={rowIndex !== currentRow || isGameOver}
                 value={cell.letter}
                 onChange={(e) => handleChange(e.target.value, rowIndex, colIndex)}
-                className={`w-10 h-10 text-center text-xl font-bold rounded border-2 transition-all ${
+                className={`w-10 h-10 text-center text-xl font-bold rounded border-2 font-mono transition-all ${
                   rowIndex === currentRow && colIndex === currentCol && !isGameOver
                     ? "border-pink-400 ring-2 ring-pink-200"
                     : "border-transparent"
                 } ${
                   {
-                    correct: "bg-green-400 text-purple-800",
-                    wrongPosition: "bg-yellow-300 text-purple-800",
-                    incorrect: "bg-red-400 text-purple-800",
+                    correct: "bg-green-300 text-purple-800",
+                    wrongPosition: "bg-yellow-200 text-purple-800",
+                    incorrect: "bg-pink-400 text-purple-800",
                     empty: "bg-purple-300 text-purple-800",
                   }[cell.state]
                 }`}
@@ -173,32 +173,39 @@ export default function Words() {
       {!isGameOver ? (
         <button
           onClick={handleSubmit}
-          className="mt-4 px-4 py-2 bg-pink-500 hover:bg-pink-600 rounded text-white text-lg font-medium transition"
+          className="mt-4 px-4 py-2 bg-gray-200 rounded text-purple-800 text-lg font-medium transition hover:bg-gray-300 cursor-pointer font-mono"
         >
           ENTER
         </button>
       ) : (
         <button
           onClick={handleRestart}
-          className="mt-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded text-white text-lg font-medium transition"
+          className="mt-4 px-4 py-2 rounded text-gray-200 bg-purple-800 text-lg font-medium transition hover:bg-purple-900 cursor-pointer font-mono"
         >
           RESTART
         </button>
       )}
       
       {isGameOver && gameWon && (
-        <div className="text-green-400 mt-4 text-xl font-bold">You're awesome! 😽</div>
-      )}
+            <div className="text-pink-600 font-mono">you awesome 😽</div>
+          )}
       
       {isGameOver && !gameWon && (
-        <div className="text-red-400 mt-4 text-xl font-bold">
-          Game Over! The word was: <span className="text-yellow-300">{chosenWord.toUpperCase()}</span>
+        <div>
+                 <div
+              className={`absolute left-1/2 transform -translate-x-1/2 top-3/8 text-red-600 text-6xl font-extrabold transition-transform duration-500 ease-in-out ${
+                "animate-size-pulse" 
+              }`}
+            >
+        <div className="flex items-center gap-4 font-mono" >
+          <span>YOU SUCK!</span>
+          <img src={USuck} alt="you suck svg" className="w-20 h-20" />
         </div>
-      )}
-      
-      <div className="text-sm text-gray-400 mt-2 text-center">
-        Use arrow keys to navigate • Enter to submit • Backspace to delete
       </div>
+      <p className="text-stone-400 font-mono">The word was: <span className="text-purple-900 font-bold font-mono">{chosenWord.toUpperCase()}</span></p>
+      </div>
+
+      )}
     </div>
   );
 }

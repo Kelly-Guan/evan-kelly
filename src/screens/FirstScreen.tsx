@@ -25,9 +25,8 @@ export default function FirstScreen({ onAuthenticate }: { onAuthenticate: () => 
 
   return (
     <div className="flex flex-col justify-between min-h-screen">
-      {/* Centered Content */}
       <div className="flex flex-col items-center justify-center flex-grow">
-        <h1 className="text-4xl mb-5 text-stone-400 text-center">{currentQ.question}</h1>
+        <h1 className="text-4xl mb-5 text-stone-400 text-center font-mono">{currentQ.question}</h1>
         <input
           type="text"
           value={input}
@@ -37,10 +36,10 @@ export default function FirstScreen({ onAuthenticate }: { onAuthenticate: () => 
           }}
           onKeyDown={handleKeyDown}
           placeholder="enter your answer"
-          className="p-2 rounded border border-stone-400 bg-stone-900 text-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-500 text-center"
+          className="p-2 rounded border border-stone-400 bg-stone-900 text-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-500 text-center font-mono"
         />
         {error && (
-          <div className="mt-3 text-red-700 text-lg flex items-center gap-2">
+          <div className="mt-3 text-red-700 text-lg flex items-center gap-2 font-mono">
             {error}
             <img src={USuck} alt="you suck" className="w-10 h-10" />
           </div>
@@ -48,7 +47,7 @@ export default function FirstScreen({ onAuthenticate }: { onAuthenticate: () => 
       </div>
       {error && (
       <div className="text-center mb-4">
-        <p className="text-stone-400 italic text-sm">hint: {currentQ.hint}</p>
+        <p className="text-stone-400 italic text-sm font-mono">hint: {currentQ.hint}</p>
       </div>)}
     </div>
   );
