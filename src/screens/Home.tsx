@@ -38,12 +38,12 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-purple-200 items-center justify-between">
       <div className="flex flex-col justify-center items-center font-mono flex-1 px-4">
-        <h1 className="text-purple-900 text-center">been dabbing on them haters for</h1>
-        <div className="flex gap-4 mt-5">
+        <h1 className="text-purple-900 text-center text-2xl">been dabbing on them haters for</h1>
+        <div className="flex gap-4 mt-4">
           {timeUnits.map((unit, idx) => (
             <div key={idx} className="flip-card">
-              <div className="flip-top">{unit.value.toString().padStart(2, "0")}</div>
-              <div className="flip-label">{unit.label}</div>
+              <div className="flip-top font-mono">{unit.value.toString().padStart(2, "0")}</div>
+              <div className="flip-label font-mono">{unit.label}</div>
             </div>
           ))}
         </div>
