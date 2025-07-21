@@ -100,7 +100,6 @@ export default function Words() {
     const currentWord = wordGrid[currentRow];
     const guess = currentWord.map((c) => c.letter).join("");
     
-    // Check if the word is complete
     if (guess.length !== chosenWord.length) {
       return;
     }
