@@ -10,7 +10,5 @@ export const mineLocations = (board: { rows: number; cols: number; mines: number
         }
     }
 
-    console.log("mineLocations: ", mineLocations)
-
     return mineLocations;
 };
