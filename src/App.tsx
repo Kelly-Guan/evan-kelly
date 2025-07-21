@@ -1,10 +1,10 @@
 import '../index.css'; 
-import FirstScreen from './screens/FirstScreen';
+import LockScreen from './screens/LockScreen';
 
 function App({ onAuthenticate }: { onAuthenticate: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black">
-      <FirstScreen onAuthenticate={onAuthenticate} />
+      <LockScreen onAuthenticate={onAuthenticate} />
     </div>
   );
 }
