@@ -214,8 +214,8 @@ export default function Boards() {
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: `repeat(${config.cols}, 30px)`,
-                gridTemplateRows: `repeat(${config.rows}, 30px)`,
+                gridTemplateColumns: `repeat(${config.cols}, 35px)`,
+                gridTemplateRows: `repeat(${config.rows}, 35px)`,
                 gap: 0,
                 marginTop: 16,
               }}

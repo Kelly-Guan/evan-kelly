@@ -23,7 +23,7 @@ export default function Cells({
       onContextMenu={onRightClick}
       onDoubleClick={onChord}
       className={`
-        w-[30px] h-[30px] flex items-center justify-center
+        w-[35px] h-[35px] flex items-center justify-center
         border border-gray-400 text-2xl select-none cursor-pointer text-purple-900 font-mono
         ${revealed ? "bg-purple-300" : "bg-transparent"}
       `}
