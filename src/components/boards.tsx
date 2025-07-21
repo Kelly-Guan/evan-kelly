@@ -135,7 +135,7 @@ export default function Boards() {
         });
       };
 
-    const handleCellChord = (row: number, col: number, e: React.MouseEvent) => {
+    const handleCellChord = (row: number, col: number) => {
         if (!revealed[row][col] || typeof board[row][col] !== "number" || board[row][col] === 0) return;
     
         // Count adjacent flags and collect neighbors
@@ -240,7 +240,7 @@ export default function Boards() {
                             onClick={() => handleCellClick(rowIdx, colIdx)}
                             onRightClick={e => handleCellFlag(rowIdx, colIdx, e)}
                             showX={Boolean(firstClick && startCell && rowIdx === startCell.row && colIdx === startCell.col)}         
-                            onChord={e => handleCellChord(rowIdx, colIdx, e)}
+                            onChord={() => handleCellChord(rowIdx, colIdx)}
                          />
                     ))
                 )}

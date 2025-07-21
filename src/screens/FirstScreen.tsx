@@ -5,7 +5,7 @@ import questions from "../assets/questions.json"
 export default function FirstScreen({ onAuthenticate }: { onAuthenticate: () => void }) {
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
-  const [currentQ, setCurrentQ] = useState(() => {
+  const [currentQ] = useState(() => {
     return questions[Math.floor(Math.random() * questions.length)];
   });
   const navigate = useNavigate();
