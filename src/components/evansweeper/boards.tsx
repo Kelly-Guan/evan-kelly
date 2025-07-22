@@ -8,7 +8,11 @@ import USuck from "../../assets/usuck.png";
 import { getCurrentPlayer, setCurrentPlayer } from "../../utils/playerContext";
 import { useStats } from "../../hooks/useStats";
 
-export default function Boards() {
+interface BoardsProps {
+  onDifficultyChange?: (difficulty: "easy" | "medium" | "hard") => void;
+}
+
+export default function Boards({ onDifficultyChange }: BoardsProps = {}) {
   const easy = { rows: 8, cols: 8, mines: 10 };
   const medium = { rows: 16, cols: 16, mines: 40 };
   const hard = { rows: 16, cols: 25, mines: 60 };
@@ -37,6 +41,11 @@ export default function Boards() {
     if (!player) return;
     let cancelled = false;
     setLoading(true);
+
+    // Notify parent of current difficulty
+    const difficulty =
+      config.cols === 8 ? "easy" : config.cols === 16 ? "medium" : "hard";
+    onDifficultyChange?.(difficulty);
 
     setTimeout(() => {
       let newBoard: (number | "M")[][] = [];
@@ -116,9 +125,11 @@ export default function Boards() {
   useEffect(() => {
     if (gameOver && player && gameTime > 0) {
       const won = checkWin(flags, board);
-      updatePlayerGame(player, won, gameTime);
+      const difficulty =
+        config.cols === 8 ? "easy" : config.cols === 16 ? "medium" : "hard";
+      updatePlayerGame(player, won, gameTime, difficulty);
     }
-  }, [gameOver, player, gameTime, updatePlayerGame]);
+  }, [gameOver, player, gameTime, updatePlayerGame, config.cols]);
 
   const switchPlayer = () => {
     const newPlayer = player === "Kelly" ? "Evan" : "Kelly";
@@ -277,21 +288,30 @@ export default function Boards() {
         <button
           className={`px-4 py-2 rounded-sm transition-colors duration-150 text-purple-900
                 ${config.cols === 8 ? "bg-gray-200" : "bg-gray-100 hover:bg-gray-200"} cursor-pointer font-mono`}
-          onClick={() => setConfig(easy)}
+          onClick={() => {
+            setConfig(easy);
+            onDifficultyChange?.("easy");
+          }}
         >
           easy
         </button>
         <button
           className={`px-4 py-2 rounded-sm transition-colors duration-150 text-purple-900
                 ${config.cols === 16 ? "bg-gray-200" : "bg-gray-100 hover:bg-gray-200"} cursor-pointer font-mono`}
-          onClick={() => setConfig(medium)}
+          onClick={() => {
+            setConfig(medium);
+            onDifficultyChange?.("medium");
+          }}
         >
           medium
         </button>
         <button
           className={`px-4 py-2 rounded-sm transition-colors duration-150 text-purple-900
                 ${config.cols === 25 ? "bg-gray-200" : "bg-gray-100 hover:bg-gray-200"} cursor-pointer font-mono`}
-          onClick={() => setConfig(hard)}
+          onClick={() => {
+            setConfig(hard);
+            onDifficultyChange?.("hard");
+          }}
         >
           hard
         </button>

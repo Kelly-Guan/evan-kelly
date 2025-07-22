@@ -23,6 +23,10 @@ export const getStats = (): PlayerStats[] => {
         player.fastestTime === "INFINITY" || player.fastestTime === null
           ? Infinity
           : player.fastestTime,
+      // Add difficulty stats if they don't exist (backward compatibility)
+      easy: player.easy || { wins: 0, losses: 0, fastestTime: Infinity },
+      medium: player.medium || { wins: 0, losses: 0, fastestTime: Infinity },
+      hard: player.hard || { wins: 0, losses: 0, fastestTime: Infinity },
     }));
   } catch {
     return [];

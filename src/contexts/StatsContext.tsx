@@ -26,6 +26,9 @@ export const StatsProvider: React.FC<StatsProviderProps> = ({ children }) => {
           totalGames: 0,
           fastestTime: Infinity,
           gameHistory: [],
+          easy: { wins: 0, losses: 0, fastestTime: Infinity },
+          medium: { wins: 0, losses: 0, fastestTime: Infinity },
+          hard: { wins: 0, losses: 0, fastestTime: Infinity },
         },
         {
           name: "Evan",
@@ -34,6 +37,9 @@ export const StatsProvider: React.FC<StatsProviderProps> = ({ children }) => {
           totalGames: 0,
           fastestTime: Infinity,
           gameHistory: [],
+          easy: { wins: 0, losses: 0, fastestTime: Infinity },
+          medium: { wins: 0, losses: 0, fastestTime: Infinity },
+          hard: { wins: 0, losses: 0, fastestTime: Infinity },
         },
       ];
       setStats(defaultStats);
@@ -62,6 +68,9 @@ export const StatsProvider: React.FC<StatsProviderProps> = ({ children }) => {
           totalGames: 0,
           fastestTime: Infinity,
           gameHistory: [],
+          easy: { wins: 0, losses: 0, fastestTime: Infinity },
+          medium: { wins: 0, losses: 0, fastestTime: Infinity },
+          hard: { wins: 0, losses: 0, fastestTime: Infinity },
         },
         {
           name: "Evan",
@@ -70,6 +79,9 @@ export const StatsProvider: React.FC<StatsProviderProps> = ({ children }) => {
           totalGames: 0,
           fastestTime: Infinity,
           gameHistory: [],
+          easy: { wins: 0, losses: 0, fastestTime: Infinity },
+          medium: { wins: 0, losses: 0, fastestTime: Infinity },
+          hard: { wins: 0, losses: 0, fastestTime: Infinity },
         },
       ];
     }
@@ -81,6 +93,7 @@ export const StatsProvider: React.FC<StatsProviderProps> = ({ children }) => {
         date: new Date().toISOString(),
         winner: won,
         duration,
+        difficulty: "medium", // Default for legacy function
       };
 
       return {
@@ -103,7 +116,12 @@ export const StatsProvider: React.FC<StatsProviderProps> = ({ children }) => {
   };
 
   const updatePlayerGame = useCallback(
-    (playerName: string, won: boolean, durationMs: number) => {
+    (
+      playerName: string,
+      won: boolean,
+      durationMs: number,
+      difficulty: "easy" | "medium" | "hard"
+    ) => {
       const currentStats = getStats();
       let players: PlayerStats[] = currentStats;
 
@@ -117,6 +135,9 @@ export const StatsProvider: React.FC<StatsProviderProps> = ({ children }) => {
             totalGames: 0,
             fastestTime: Infinity,
             gameHistory: [],
+            easy: { wins: 0, losses: 0, fastestTime: Infinity },
+            medium: { wins: 0, losses: 0, fastestTime: Infinity },
+            hard: { wins: 0, losses: 0, fastestTime: Infinity },
           },
           {
             name: "Evan",
@@ -125,6 +146,9 @@ export const StatsProvider: React.FC<StatsProviderProps> = ({ children }) => {
             totalGames: 0,
             fastestTime: Infinity,
             gameHistory: [],
+            easy: { wins: 0, losses: 0, fastestTime: Infinity },
+            medium: { wins: 0, losses: 0, fastestTime: Infinity },
+            hard: { wins: 0, losses: 0, fastestTime: Infinity },
           },
         ];
       }
@@ -136,6 +160,13 @@ export const StatsProvider: React.FC<StatsProviderProps> = ({ children }) => {
             date: new Date().toISOString(),
             winner: won,
             duration: durationMs,
+            difficulty,
+          };
+
+          const difficultyStats = player[difficulty] || {
+            wins: 0,
+            losses: 0,
+            fastestTime: Infinity,
           };
 
           return {
@@ -146,6 +177,13 @@ export const StatsProvider: React.FC<StatsProviderProps> = ({ children }) => {
             fastestTime: won
               ? Math.min(player.fastestTime, durationMs)
               : player.fastestTime,
+            [difficulty]: {
+              wins: difficultyStats.wins + (won ? 1 : 0),
+              losses: difficultyStats.losses + (won ? 0 : 1),
+              fastestTime: won
+                ? Math.min(difficultyStats.fastestTime, durationMs)
+                : difficultyStats.fastestTime,
+            },
             gameHistory: [
               gameResult,
               ...(Array.isArray(player.gameHistory) ? player.gameHistory : []),
