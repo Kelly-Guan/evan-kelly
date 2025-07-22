@@ -36,7 +36,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-purple-200 items-center justify-between">
+    <div className="min-h-[calc(100vh-60px)] flex flex-col bg-purple-200 items-center justify-between">
       <div className="flex flex-col justify-center items-center font-mono flex-1 px-4">
         <h1 className="text-purple-900 text-center text-2xl">
           been dabbing on them haters for

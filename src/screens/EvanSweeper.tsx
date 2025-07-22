@@ -11,7 +11,7 @@ export default function EvanSweeper() {
   return (
     <StatsProvider>
       <div className="flex flex-col items-center justify-center bg-purple-200">
-        <div className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center">
+        <div className="min-h-[calc(100vh-60px)] flex flex-col items-center justify-center">
           <Boards onDifficultyChange={setCurrentDifficulty} />
         </div>
         <ScoreBoard currentDifficulty={currentDifficulty} />
