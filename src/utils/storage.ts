@@ -3,6 +3,11 @@ import type {
   GameResult,
 } from "../components/evansweeper/scoreboard";
 
+// Type for serialized stats where Infinity becomes "INFINITY"
+type SerializedPlayerStats = Omit<PlayerStats, "fastestTime"> & {
+  fastestTime: number | "INFINITY" | null;
+};
+
 const STATS_KEY = "evansweeper-stats";
 const HISTORY_KEY = "evansweeper-history";
 
@@ -10,7 +15,7 @@ const HISTORY_KEY = "evansweeper-history";
 export const getStats = (): PlayerStats[] => {
   const data = localStorage.getItem(STATS_KEY);
   try {
-    const parsed = data ? (JSON.parse(data) as any[]) : [];
+    const parsed = data ? (JSON.parse(data) as SerializedPlayerStats[]) : [];
     // Convert back from serializable format
     return parsed.map((player) => ({
       ...player,
