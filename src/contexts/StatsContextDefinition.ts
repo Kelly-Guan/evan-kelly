@@ -7,7 +7,7 @@ interface StatsContextType {
   updatePlayerGame: (
     playerName: string,
     won: boolean,
-    duration: number
+    durationMs: number
   ) => void;
   refreshStats: () => void;
   initializeStats: () => void;

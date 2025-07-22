@@ -19,9 +19,18 @@ export interface PlayerStats {
 export default function ScoreBoard() {
   const { stats } = useStats();
 
-  const formatTime = (seconds: number) => {
-    if (seconds === Infinity) return "N/A";
-    return `${seconds}s`;
+  const formatTime = (milliseconds: number) => {
+    if (
+      milliseconds === Infinity ||
+      milliseconds === null ||
+      milliseconds === undefined
+    )
+      return "∞";
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    const ms = Math.floor((milliseconds % 1000) / 10);
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}:${String(ms).padStart(2, "0")}`;
   };
 
   const formatDate = (dateString: string) => {
@@ -134,8 +143,8 @@ export default function ScoreBoard() {
                     </div>
                     <div className="text-sm">
                       {game.winner
-                        ? `Won in ${game.duration}s`
-                        : `Lost after ${game.duration}s`}
+                        ? `Won in ${formatTime(game.duration)}`
+                        : `Lost after ${formatTime(game.duration)}`}
                     </div>
                   </div>
                 ))}

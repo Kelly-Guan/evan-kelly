@@ -26,9 +26,8 @@ export default function Boards() {
     col: number;
   } | null>(null);
   const [loading, setLoading] = useState(true);
-  const [startTime, setStartTime] = useState<number>(0);
+  const [gameTime, setGameTime] = useState<number>(0);
 
-  
   useEffect(() => {
     const savedPlayer = getCurrentPlayer();
     if (savedPlayer) setPlayer(savedPlayer);
@@ -105,7 +104,7 @@ export default function Boards() {
         setFirstClick(true);
         setStartCell(start);
         setLoading(false);
-        setStartTime(Date.now());
+        setGameTime(0);
       }
     }, 100);
 
@@ -115,12 +114,11 @@ export default function Boards() {
   }, [config, player]);
 
   useEffect(() => {
-    if (gameOver && player && startTime) {
-      const duration = Math.floor((Date.now() - startTime) / 1000);
+    if (gameOver && player && gameTime > 0) {
       const won = checkWin(flags, board);
-      updatePlayerGame(player, won, duration);
+      updatePlayerGame(player, won, gameTime);
     }
-  }, [gameOver, player, startTime, updatePlayerGame]);
+  }, [gameOver, player, gameTime, updatePlayerGame]);
 
   const switchPlayer = () => {
     const newPlayer = player === "Kelly" ? "Evan" : "Kelly";
@@ -272,6 +270,7 @@ export default function Boards() {
         totalMines={config.mines}
         firstClick={firstClick}
         gameOver={gameOver}
+        onTimeUpdate={setGameTime}
       />
 
       <div className="flex gap-2">

@@ -103,7 +103,7 @@ export const StatsProvider: React.FC<StatsProviderProps> = ({ children }) => {
   };
 
   const updatePlayerGame = useCallback(
-    (playerName: string, won: boolean, duration: number) => {
+    (playerName: string, won: boolean, durationMs: number) => {
       const currentStats = getStats();
       let players: PlayerStats[] = currentStats;
 
@@ -135,7 +135,7 @@ export const StatsProvider: React.FC<StatsProviderProps> = ({ children }) => {
             id: crypto.randomUUID(),
             date: new Date().toISOString(),
             winner: won,
-            duration,
+            duration: durationMs,
           };
 
           return {
@@ -144,7 +144,7 @@ export const StatsProvider: React.FC<StatsProviderProps> = ({ children }) => {
             losses: player.losses + (won ? 0 : 1),
             totalGames: player.totalGames + 1,
             fastestTime: won
-              ? Math.min(player.fastestTime, duration)
+              ? Math.min(player.fastestTime, durationMs)
               : player.fastestTime,
             gameHistory: [
               gameResult,

@@ -5,6 +5,7 @@ interface HeaderProps {
   totalMines: number;
   firstClick: boolean;
   gameOver: boolean;
+  onTimeUpdate?: (timeInMilliseconds: number) => void;
 }
 
 export default function Header({
@@ -12,6 +13,7 @@ export default function Header({
   totalMines,
   firstClick,
   gameOver,
+  onTimeUpdate,
 }: HeaderProps) {
   const [elapsed, setElapsed] = useState(0);
   const rafId = useRef<number | null>(null);
@@ -19,14 +21,15 @@ export default function Header({
 
   const flagCount = flags.reduce(
     (sum, row) => sum + row.filter(Boolean).length,
-    0,
+    0
   );
 
   useEffect(() => {
     if (!firstClick && !gameOver) {
       startTimeRef.current = performance.now() - elapsed;
       const update = () => {
-        setElapsed(performance.now() - (startTimeRef.current || 0));
+        const newElapsed = performance.now() - (startTimeRef.current || 0);
+        setElapsed(newElapsed);
         rafId.current = requestAnimationFrame(update);
       };
       rafId.current = requestAnimationFrame(update);
@@ -44,10 +47,19 @@ export default function Header({
     }
   }, [firstClick]);
 
+  // Send the final time when game ends
+  useEffect(() => {
+    if (gameOver && !firstClick && onTimeUpdate) {
+      onTimeUpdate(elapsed);
+    }
+  }, [gameOver, firstClick, elapsed, onTimeUpdate]);
+
   const formatTime = (ms: number) => {
-    const minutes = Math.floor(ms / 6000);
-    const seconds = Math.floor((ms % 6000) / 100);
-    const milliseconds = Math.floor(ms % 100);
+    const totalSeconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    const milliseconds = Math.floor((ms % 1000) / 10);
+
     return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}:${String(milliseconds).padStart(2, "0")}`;
   };
 
