@@ -5,60 +5,15 @@ import { revealCells } from "../../utils/revealCells";
 import { isLogicallySolvable } from "../../utils/logicSolver";
 import Header from "./header";
 import USuck from "../../assets/usuck.png";
-import { getStats, setStats } from "../../utils/storage";
 import { getCurrentPlayer, setCurrentPlayer } from "../../utils/playerContext";
-import type { GameResult, PlayerStats } from "./scoreboard";
-
-export const updateStats = (winnerName: string, duration: number) => {
-  const players: PlayerStats[] = getStats() || [
-    {
-      name: "Kelly",
-      wins: 0,
-      losses: 0,
-      totalGames: 0,
-      fastestTime: Infinity,
-      gameHistory: [] as GameResult[],
-    },
-    {
-      name: "Evan",
-      wins: 0,
-      losses: 0,
-      totalGames: 0,
-      fastestTime: Infinity,
-      gameHistory: [] as GameResult[],
-    },
-  ];
-
-  const updated = players.map((player) => {
-    const won = player.name === winnerName;
-    return {
-      ...player,
-      wins: player.wins + (won ? 1 : 0),
-      losses: player.losses + (won ? 0 : 1),
-      totalGames: player.totalGames + 1,
-      fastestTime: won
-        ? Math.min(player.fastestTime, duration)
-        : player.fastestTime,
-      gameHistory: [
-        {
-          id: crypto.randomUUID(),
-          date: new Date().toISOString(),
-          winner: won,
-          duration,
-        },
-        ...(Array.isArray(player.gameHistory) ? player.gameHistory : []),
-      ],
-    };
-  });
-
-  setStats(updated);
-};
+import { useStats } from "../../hooks/useStats";
 
 export default function Boards() {
   const easy = { rows: 8, cols: 8, mines: 10 };
   const medium = { rows: 16, cols: 16, mines: 40 };
   const hard = { rows: 16, cols: 25, mines: 60 };
 
+  const { updatePlayerGame } = useStats();
   const [player, setPlayer] = useState<"Kelly" | "Evan" | null>(null);
   const [config, setConfig] = useState(easy);
   const [board, setBoard] = useState<(number | "M")[][]>([]);
@@ -92,8 +47,8 @@ export default function Boards() {
         const mines = mineLocations(config);
         newBoard = Array.from({ length: config.rows }, (_, r) =>
           Array.from({ length: config.cols }, (_, c) =>
-            mines.has(`${r},${c}`) ? "M" : 0,
-          ),
+            mines.has(`${r},${c}`) ? "M" : 0
+          )
         );
 
         for (let r = 0; r < config.rows; r++) {
@@ -137,13 +92,13 @@ export default function Boards() {
         setBoard(newBoard);
         setRevealed(
           Array.from({ length: config.rows }, () =>
-            Array(config.cols).fill(false),
-          ),
+            Array(config.cols).fill(false)
+          )
         );
         setFlags(
           Array.from({ length: config.rows }, () =>
-            Array(config.cols).fill(false),
-          ),
+            Array(config.cols).fill(false)
+          )
         );
         setGameOver(false);
         setFirstClick(true);
@@ -159,13 +114,13 @@ export default function Boards() {
   }, [config, player]);
 
   useEffect(() => {
-    if (gameOver && checkWin(flags, board)) {
+    if (gameOver && player && startTime) {
       const duration = Math.floor((Date.now() - startTime) / 1000);
-      updateStats(player!, duration);
+      const won = checkWin(flags, board);
+      updatePlayerGame(player, won, duration);
     }
-  }, [gameOver]);
+  }, [gameOver, player, startTime, updatePlayerGame]);
 
-  // Add function to switch players
   const switchPlayer = () => {
     const newPlayer = player === "Kelly" ? "Evan" : "Kelly";
     setPlayer(newPlayer);
@@ -174,7 +129,7 @@ export default function Boards() {
 
   if (!player) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen gap-4 font-mono text-purple-900">
+      <div className="flex flex-col items-center justify-center gap-4 font-mono text-purple-900">
         <h2 className="text-xl">Who is playing?</h2>
         <div className="flex gap-4">
           <button
@@ -184,7 +139,7 @@ export default function Boards() {
             }}
             className="bg-purple-300 px-4 py-2 rounded hover:bg-purple-400"
           >
-            I'm Kelly
+            Kelly
           </button>
           <button
             onClick={() => {
@@ -193,13 +148,12 @@ export default function Boards() {
             }}
             className="bg-purple-300 px-4 py-2 rounded hover:bg-purple-400"
           >
-            I'm Evan
+            Evan
           </button>
         </div>
       </div>
     );
   }
-
 
   const handleCellClick = (row: number, col: number) => {
     if (gameOver || revealed[row][col] || flags[row][col]) return;
@@ -211,7 +165,7 @@ export default function Boards() {
         board,
         revealed.map((r) => [...r]),
         row,
-        col,
+        col
       );
       setRevealed(newRevealed);
       return;
@@ -219,7 +173,7 @@ export default function Boards() {
 
     if (board[row][col] === "M") {
       const newRevealed = revealed.map((rowArr, r) =>
-        rowArr.map((cell, c) => (board[r][c] === "M" ? true : cell)),
+        rowArr.map((cell, c) => (board[r][c] === "M" ? true : cell))
       );
       setRevealed(newRevealed);
       setGameOver(true);
@@ -228,7 +182,7 @@ export default function Boards() {
         board,
         revealed.map((r) => [...r]),
         row,
-        col,
+        col
       );
       setRevealed(newRevealed);
     }
@@ -240,7 +194,7 @@ export default function Boards() {
 
     setFlags((prev) => {
       const newFlags = prev.map((rowArr, r) =>
-        rowArr.map((cell, c) => (r === row && c === col ? !cell : cell)),
+        rowArr.map((cell, c) => (r === row && c === col ? !cell : cell))
       );
 
       if (checkWin(newFlags, board)) {
@@ -260,7 +214,7 @@ export default function Boards() {
       return;
 
     let flagCount = 0;
-    let neighbors: { r: number; c: number }[] = [];
+    const neighbors: { r: number; c: number }[] = [];
     for (let dr = -1; dr <= 1; dr++) {
       for (let dc = -1; dc <= 1; dc++) {
         if (dr === 0 && dc === 0) continue;
@@ -290,7 +244,7 @@ export default function Boards() {
     if (hitMine) {
       setGameOver(true);
       const revealAll = revealed.map((rowArr, r) =>
-        rowArr.map((cell, c) => (board[r][c] === "M" ? true : cell)),
+        rowArr.map((cell, c) => (board[r][c] === "M" ? true : cell))
       );
       setRevealed(revealAll);
     }
@@ -310,6 +264,9 @@ export default function Boards() {
 
   return (
     <div className="flex flex-col items-center justify-center">
+      <h1 className="text-4xl mb-5 text-purple-900 font-mono">
+        evan sweeps 🧹
+      </h1>
       <Header
         flags={flags}
         totalMines={config.mines}
@@ -370,15 +327,14 @@ export default function Boards() {
                   firstClick &&
                     startCell &&
                     rowIdx === startCell.row &&
-                    colIdx === startCell.col,
+                    colIdx === startCell.col
                 )}
                 onChord={() => handleCellChord(rowIdx, colIdx)}
               />
-            )),
+            ))
           )}
         </div>
       )}
-
 
       {gameOver && !checkWin(flags, board) && (
         <div
@@ -406,7 +362,6 @@ export default function Boards() {
           Switch Player
         </button>
       </div>
-
     </div>
   );
 }

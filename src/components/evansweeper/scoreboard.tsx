@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { getStats } from "../../utils/storage";
+import { useStats } from "../../hooks/useStats";
 
 export interface GameResult {
   id: string;
@@ -18,14 +17,7 @@ export interface PlayerStats {
 }
 
 export default function ScoreBoard() {
-  const [stats, setStats] = useState<PlayerStats[]>([]);
-
-  useEffect(() => {
-    const currentStats = getStats();
-    if (currentStats) {
-      setStats(currentStats);
-    }
-  }, []);
+  const { stats } = useStats();
 
   const formatTime = (seconds: number) => {
     if (seconds === Infinity) return "N/A";
@@ -116,11 +108,11 @@ export default function ScoreBoard() {
                   player.gameHistory.map((game) => ({
                     ...game,
                     playerName: player.name,
-                  })),
+                  }))
                 )
                 .sort(
                   (a, b) =>
-                    new Date(b.date).getTime() - new Date(a.date).getTime(),
+                    new Date(b.date).getTime() - new Date(a.date).getTime()
                 )
                 .slice(0, 10) // Show last 10 games
                 .map((game, index) => (
@@ -165,7 +157,7 @@ export default function ScoreBoard() {
               <strong>Most Active:</strong>{" "}
               {
                 stats.reduce((prev, current) =>
-                  prev.totalGames > current.totalGames ? prev : current,
+                  prev.totalGames > current.totalGames ? prev : current
                 ).name
               }
             </div>
@@ -173,7 +165,7 @@ export default function ScoreBoard() {
               <strong>Speed Demon:</strong>{" "}
               {
                 stats.reduce((prev, current) =>
-                  prev.fastestTime < current.fastestTime ? prev : current,
+                  prev.fastestTime < current.fastestTime ? prev : current
                 ).name
               }
             </div>
