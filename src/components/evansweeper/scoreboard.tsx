@@ -150,11 +150,11 @@ export default function ScoreBoard({ currentDifficulty }: ScoreBoardProps) {
   const getDifficultyTitle = (difficulty: "easy" | "medium" | "hard") => {
     switch (difficulty) {
       case "easy":
-        return "🟢 Easy (8x8, 10 mines)";
+        return "🟢 Easy";
       case "medium":
-        return "🟡 Medium (16x16, 40 mines)";
+        return "🟡 Medium";
       case "hard":
-        return "🔴 Hard (16x25, 60 mines)";
+        return "🔴 Hard";
     }
   };
 
