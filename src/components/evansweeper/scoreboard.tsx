@@ -115,7 +115,7 @@ export default function ScoreBoard() {
                     new Date(b.date).getTime() - new Date(a.date).getTime()
                 )
                 .slice(0, 10) // Show last 10 games
-                .map((game, index) => (
+                .map((game) => (
                   <div
                     key={game.id}
                     className={`p-2 rounded border ${
@@ -147,31 +147,6 @@ export default function ScoreBoard() {
           )}
         </div>
       </div>
-
-      {/* Fun Stats */}
-      {stats.length > 0 && stats.some((p) => p.totalGames > 0) && (
-        <div className="mt-6 pt-4 border-t border-gray-300">
-          <h3 className="text-lg mb-2">Fun Stats</h3>
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <strong>Most Active:</strong>{" "}
-              {
-                stats.reduce((prev, current) =>
-                  prev.totalGames > current.totalGames ? prev : current
-                ).name
-              }
-            </div>
-            <div>
-              <strong>Speed Demon:</strong>{" "}
-              {
-                stats.reduce((prev, current) =>
-                  prev.fastestTime < current.fastestTime ? prev : current
-                ).name
-              }
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

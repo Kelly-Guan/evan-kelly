@@ -28,6 +28,7 @@ export default function Boards() {
   const [loading, setLoading] = useState(true);
   const [startTime, setStartTime] = useState<number>(0);
 
+  
   useEffect(() => {
     const savedPlayer = getCurrentPlayer();
     if (savedPlayer) setPlayer(savedPlayer);
@@ -130,7 +131,6 @@ export default function Boards() {
   if (!player) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 font-mono text-purple-900">
-        <h2 className="text-xl">Who is playing?</h2>
         <div className="flex gap-4">
           <button
             onClick={() => {
@@ -276,21 +276,21 @@ export default function Boards() {
 
       <div className="flex gap-2">
         <button
-          className={`p-px px-3 rounded-sm transition-colors duration-150 text-purple-900
+          className={`px-4 py-2 rounded-sm transition-colors duration-150 text-purple-900
                 ${config.cols === 8 ? "bg-gray-200" : "bg-gray-100 hover:bg-gray-200"} cursor-pointer font-mono`}
           onClick={() => setConfig(easy)}
         >
           easy
         </button>
         <button
-          className={`p-px px-3 rounded-sm transition-colors duration-150 text-purple-900
+          className={`px-4 py-2 rounded-sm transition-colors duration-150 text-purple-900
                 ${config.cols === 16 ? "bg-gray-200" : "bg-gray-100 hover:bg-gray-200"} cursor-pointer font-mono`}
           onClick={() => setConfig(medium)}
         >
           medium
         </button>
         <button
-          className={`p-px px-3 rounded-sm transition-colors duration-150 text-purple-900
+          className={`px-4 py-2 rounded-sm transition-colors duration-150 text-purple-900
                 ${config.cols === 25 ? "bg-gray-200" : "bg-gray-100 hover:bg-gray-200"} cursor-pointer font-mono`}
           onClick={() => setConfig(hard)}
         >
@@ -357,7 +357,7 @@ export default function Boards() {
         </span>
         <button
           onClick={switchPlayer}
-          className="p-px px-3 rounded-sm transition-colors duration-150 text-purple-900 cursor-pointer bg-gray-100 hover:bg-gray-200"
+          className="px-4 py-2 rounded-sm transition-colors duration-150 text-purple-900 cursor-pointer bg-purple-300 rounded hover:bg-purple-400"
         >
           Switch Player
         </button>

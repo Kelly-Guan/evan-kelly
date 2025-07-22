@@ -16,7 +16,7 @@ export default function NavBar() {
         <div className="flex gap-2">
           <button
             onClick={() => navigate("/EvanSweeper")}
-            className={`p-px px-3 rounded-sm text-purple-900 hover:bg-purple-300 cursor-pointer font-mono ${
+            className={`px-4 py-2 rounded-sm text-purple-900 hover:bg-purple-300 cursor-pointer font-mono ${
               location.pathname === "/EvanSweeper" ? "bg-purple-300" : ""
             }`}
           >
@@ -24,7 +24,7 @@ export default function NavBar() {
           </button>
           <button
             onClick={() => navigate("/EvanWords")}
-            className={`p-px px-3 rounded-sm text-purple-900 hover:bg-purple-300 cursor-pointer font-mono ${
+            className={`px-4 py-2 rounded-sm text-purple-900 hover:bg-purple-300 cursor-pointer font-mono ${
               location.pathname === "/EvanWords" ? "bg-purple-300" : ""
             }`}
           >

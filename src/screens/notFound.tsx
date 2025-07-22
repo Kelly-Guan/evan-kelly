@@ -8,7 +8,7 @@ export default function NotFound() {
       <p className="text-lg mb-6">where the heck are you going broski?</p>
       <button
         onClick={() => navigate("/")}
-        className="bg-purple-900 px-6 py-3 rounded hover:bg-purple-700 transition"
+        className="bg-purple-900 px-4 py-2 rounded hover:bg-purple-700 transition"
       >
         Go Home
       </button>

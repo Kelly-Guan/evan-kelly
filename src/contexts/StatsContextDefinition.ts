@@ -1,8 +1,5 @@
 import { createContext } from "react";
-import type {
-  GameResult,
-  PlayerStats,
-} from "../components/evansweeper/scoreboard";
+import type { PlayerStats } from "../components/evansweeper/scoreboard";
 
 interface StatsContextType {
   stats: PlayerStats[];
