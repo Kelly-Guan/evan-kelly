@@ -1,17 +1,17 @@
 [
-    {
-        "question": "when did we start dating?", 
-        "answer": "may 31, 2025",
-        "hint": "its not standardized"
-    },
-    {
-        "question": "what is my favourite colour?", 
-        "answer": "pink",
-        "hint": "its not green"
-    }, 
-    {
-        "question": "our favourite restaurant", 
-        "answer": "saku",
-        "hint": "sushi and tacos 😋"
-    }
+  {
+    "question": "when did we start dating?",
+    "answer": "may 31, 2025",
+    "hint": "its not standardized"
+  },
+  {
+    "question": "what is my favourite colour?",
+    "answer": "pink",
+    "hint": "its not green"
+  },
+  {
+    "question": "our favourite restaurant",
+    "answer": "saku",
+    "hint": "sushi and tacos 😋"
+  }
 ]

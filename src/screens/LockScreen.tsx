@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import questions from "../assets/questions.json"
-import USuck  from "../assets/usuck.png";
+import questions from "../assets/questions.json";
+import USuck from "../assets/usuck.png";
 
-
-export default function LockScreen({ onAuthenticate }: { onAuthenticate: () => void }) {
+export default function LockScreen({
+  onAuthenticate,
+}: {
+  onAuthenticate: () => void;
+}) {
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
   const [currentQ] = useState(() => {
@@ -18,7 +21,7 @@ export default function LockScreen({ onAuthenticate }: { onAuthenticate: () => v
         onAuthenticate();
         navigate("/Home");
       } else {
-        setError("WRONG BITCH!")
+        setError("WRONG BITCH!");
       }
     }
   };
@@ -26,7 +29,9 @@ export default function LockScreen({ onAuthenticate }: { onAuthenticate: () => v
   return (
     <div className="flex flex-col justify-between min-h-screen">
       <div className="flex flex-col items-center justify-center flex-grow">
-        <h1 className="text-4xl mb-7 text-stone-400 text-center font-mono">{currentQ.question}</h1>
+        <h1 className="text-4xl mb-7 text-stone-400 text-center font-mono">
+          {currentQ.question}
+        </h1>
         <input
           type="text"
           value={input}
@@ -46,10 +51,12 @@ export default function LockScreen({ onAuthenticate }: { onAuthenticate: () => v
         )}
       </div>
       {error && (
-      <div className="text-center mb-4">
-        <p className="text-stone-400 italic text-sm font-mono">hint: {currentQ.hint}</p>
-      </div>)}
+        <div className="text-center mb-4">
+          <p className="text-stone-400 italic text-sm font-mono">
+            hint: {currentQ.hint}
+          </p>
+        </div>
+      )}
     </div>
   );
-  
-}  
+}

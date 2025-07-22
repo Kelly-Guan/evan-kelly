@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import wordleWords from "../../assets/wordleWords.json"
-import USuck from "../../assets/usuck.png"
-
+import wordleWords from "../../assets/wordleWords.json";
+import USuck from "../../assets/usuck.png";
 
 type LetterState = "empty" | "correct" | "wrongPosition" | "incorrect";
 
@@ -19,12 +18,16 @@ export default function Words() {
   const [currentCol, setCurrentCol] = useState(0);
 
   const initializeGame = () => {
-    const randomEntry = wordleWords[Math.floor(Math.random() * wordleWords.length)];
+    const randomEntry =
+      wordleWords[Math.floor(Math.random() * wordleWords.length)];
     const word = randomEntry.word.toLowerCase();
     setChosenWord(word);
-    
+
     const newGrid: LetterCell[][] = Array.from({ length: 7 }, () =>
-      Array.from({ length: word.length }, () => ({ letter: "", state: "empty" }))
+      Array.from({ length: word.length }, () => ({
+        letter: "",
+        state: "empty",
+      })),
     );
     setWordGrid(newGrid);
     setCurrentRow(0);
@@ -70,7 +73,7 @@ export default function Words() {
         const newGrid = [...wordGrid];
         newGrid[currentRow][currentCol].letter = char;
         setWordGrid(newGrid);
-        
+
         if (currentCol < chosenWord.length - 1) {
           setCurrentCol(currentCol + 1);
         }
@@ -83,12 +86,12 @@ export default function Words() {
 
   const handleChange = (value: string, row: number, col: number) => {
     if (row !== currentRow || isGameOver) return;
-    
+
     const char = value.slice(-1).toLowerCase();
     const newGrid = [...wordGrid];
     newGrid[row][col].letter = char;
     setWordGrid(newGrid);
-    
+
     if (char && col < chosenWord.length - 1) {
       setCurrentCol(col + 1);
     }
@@ -96,10 +99,10 @@ export default function Words() {
 
   const handleSubmit = () => {
     if (isGameOver) return;
-    
+
     const currentWord = wordGrid[currentRow];
     const guess = currentWord.map((c) => c.letter).join("");
-    
+
     if (guess.length !== chosenWord.length) {
       return;
     }
@@ -120,8 +123,10 @@ export default function Words() {
 
     setWordGrid(newGrid);
 
-    const isCorrect = newGrid[currentRow].every((cell) => cell.state === "correct");
-    
+    const isCorrect = newGrid[currentRow].every(
+      (cell) => cell.state === "correct",
+    );
+
     if (isCorrect) {
       setIsGameOver(true);
       setGameWon(true);
@@ -150,9 +155,13 @@ export default function Words() {
                 maxLength={1}
                 disabled={rowIndex !== currentRow || isGameOver}
                 value={cell.letter}
-                onChange={(e) => handleChange(e.target.value, rowIndex, colIndex)}
+                onChange={(e) =>
+                  handleChange(e.target.value, rowIndex, colIndex)
+                }
                 className={`w-10 h-10 text-center text-xl font-bold rounded border-2 font-mono transition-all ${
-                  rowIndex === currentRow && colIndex === currentCol && !isGameOver
+                  rowIndex === currentRow &&
+                  colIndex === currentCol &&
+                  !isGameOver
                     ? "border-pink-400 ring-2 ring-pink-200"
                     : "border-transparent"
                 } ${
@@ -168,7 +177,7 @@ export default function Words() {
           </div>
         ))}
       </div>
-      
+
       {!isGameOver ? (
         <button
           onClick={handleSubmit}
@@ -184,26 +193,28 @@ export default function Words() {
           RESTART
         </button>
       )}
-      
+
       {isGameOver && gameWon && (
-            <div className="text-pink-600 font-mono">you awesome 😽</div>
-          )}
-      
+        <div className="text-pink-600 font-mono">you awesome 😽</div>
+      )}
+
       {isGameOver && !gameWon && (
         <div>
-                 <div
-              className={`absolute left-1/2 transform -translate-x-1/2 top-3/8 text-red-600 text-6xl font-extrabold transition-transform duration-500 ease-in-out ${
-                "animate-size-pulse" 
-              }`}
-            >
-        <div className="flex items-center gap-4 font-mono" >
-          <span>YOU SUCK!</span>
-          <img src={USuck} alt="you suck svg" className="w-20 h-20" />
+          <div
+            className={`absolute left-1/2 transform -translate-x-1/2 top-3/8 text-red-600 text-6xl font-extrabold transition-transform duration-500 ease-in-out ${"animate-size-pulse"}`}
+          >
+            <div className="flex items-center gap-4 font-mono">
+              <span>YOU SUCK!</span>
+              <img src={USuck} alt="you suck svg" className="w-20 h-20" />
+            </div>
+          </div>
+          <p className="text-stone-400 font-mono">
+            The word was:{" "}
+            <span className="text-purple-900 font-bold font-mono">
+              {chosenWord.toUpperCase()}
+            </span>
+          </p>
         </div>
-      </div>
-      <p className="text-stone-400 font-mono">The word was: <span className="text-purple-900 font-bold font-mono">{chosenWord.toUpperCase()}</span></p>
-      </div>
-
       )}
     </div>
   );

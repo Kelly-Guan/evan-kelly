@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import "./FlipClock.css"; 
-import Dab from "../assets/dab.png"
+import "./FlipClock.css";
+import Dab from "../assets/dab.png";
 
 export default function Home() {
   const targetDate = new Date("2025-05-31T00:00:00");
@@ -38,18 +38,25 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-purple-200 items-center justify-between">
       <div className="flex flex-col justify-center items-center font-mono flex-1 px-4">
-        <h1 className="text-purple-900 text-center text-2xl">been dabbing on them haters for</h1>
+        <h1 className="text-purple-900 text-center text-2xl">
+          been dabbing on them haters for
+        </h1>
         <div className="flex gap-4 mt-4">
           {timeUnits.map((unit, idx) => (
             <div key={idx} className="flip-card">
-              <div className="flip-top font-mono">{unit.value.toString().padStart(2, "0")}</div>
+              <div className="flip-top font-mono">
+                {unit.value.toString().padStart(2, "0")}
+              </div>
               <div className="flip-label font-mono">{unit.label}</div>
             </div>
           ))}
         </div>
       </div>
-      <img src={Dab} alt="you suck svg" className="w-20 h-20 absolute bottom-8 right-8" />
+      <img
+        src={Dab}
+        alt="you suck svg"
+        className="w-20 h-20 absolute bottom-8 right-8"
+      />
     </div>
   );
-  
 }

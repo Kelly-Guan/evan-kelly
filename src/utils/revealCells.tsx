@@ -2,7 +2,7 @@ export function revealCells(
   board: (number | "M")[][],
   revealed: boolean[][],
   row: number,
-  col: number
+  col: number,
 ): boolean[][] {
   const rows = board.length;
   const cols = board[0].length;

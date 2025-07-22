@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 export default function NotFound() {
   const navigate = useNavigate();
@@ -7,7 +7,7 @@ export default function NotFound() {
       <h1 className="text-6xl font-bold mb-4">401 🤦‍♀️</h1>
       <p className="text-lg mb-6">where the heck are you going broski?</p>
       <button
-        onClick={() => navigate('/')}
+        onClick={() => navigate("/")}
         className="bg-purple-900 px-6 py-3 rounded hover:bg-purple-700 transition"
       >
         Go Home

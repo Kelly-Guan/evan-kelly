@@ -9,16 +9,16 @@ interface CellsProps {
 }
 
 export default function Cells({
-    value,
-    revealed,
-    flagged,
-    onClick,
-    onRightClick,
-    onChord,
-    showX,
-  }:  CellsProps) {
-    return (
-      <div
+  value,
+  revealed,
+  flagged,
+  onClick,
+  onRightClick,
+  onChord,
+  showX,
+}: CellsProps) {
+  return (
+    <div
       onClick={onClick}
       onContextMenu={onRightClick}
       onDoubleClick={onChord}
@@ -28,15 +28,15 @@ export default function Cells({
         ${revealed ? "bg-purple-300" : "bg-transparent"}
       `}
     >
-        {revealed
-          ? value === "M"
-            ? "💔"
-            : value || ""
-          : flagged
+      {revealed
+        ? value === "M"
+          ? "💔"
+          : value || ""
+        : flagged
           ? "🫶"
           : showX
-          ? "👩‍❤️‍💋‍👨"
-          : ""}
-      </div>
-    );
-  }
+            ? "👩‍❤️‍💋‍👨"
+            : ""}
+    </div>
+  );
+}

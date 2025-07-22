@@ -1,5 +1,5 @@
-import '../index.css'; 
-import LockScreen from './screens/LockScreen';
+import "../index.css";
+import LockScreen from "./screens/LockScreen";
 
 function App({ onAuthenticate }: { onAuthenticate: () => void }) {
   return (

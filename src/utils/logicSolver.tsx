@@ -1,6 +1,6 @@
 export function isLogicallySolvable(
   board: (number | "M")[][],
-  startCell: { row: number; col: number }
+  startCell: { row: number; col: number },
 ): boolean {
   const rows = board.length;
   const cols = board[0].length;
@@ -8,9 +8,14 @@ export function isLogicallySolvable(
   const flagged = Array.from({ length: rows }, () => Array(cols).fill(false));
 
   const DIRS = [
-    [-1, -1], [-1, 0], [-1, 1],
-    [ 0, -1],          [ 0, 1],
-    [ 1, -1], [ 1, 0], [ 1, 1],
+    [-1, -1],
+    [-1, 0],
+    [-1, 1],
+    [0, -1],
+    [0, 1],
+    [1, -1],
+    [1, 0],
+    [1, 1],
   ];
 
   // Fast flood fill for zeroes
@@ -25,8 +30,15 @@ export function isLogicallySolvable(
 
       if (board[cr][cc] === 0) {
         for (const [dr, dc] of DIRS) {
-          const nr = cr + dr, nc = cc + dc;
-          if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && !revealed[nr][nc]) {
+          const nr = cr + dr,
+            nc = cc + dc;
+          if (
+            nr >= 0 &&
+            nr < rows &&
+            nc >= 0 &&
+            nc < cols &&
+            !revealed[nr][nc]
+          ) {
             stack.push([nr, nc]);
           }
         }
@@ -49,7 +61,8 @@ export function isLogicallySolvable(
         let flagCount = 0;
 
         for (const [dr, dc] of DIRS) {
-          const nr = r + dr, nc = c + dc;
+          const nr = r + dr,
+            nc = c + dc;
           if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) continue;
           if (flagged[nr][nc]) flagCount++;
           else if (!revealed[nr][nc]) unrevealed.push([nr, nc]);
